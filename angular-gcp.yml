@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: pet-angular
+ labels:
+  app: pet-angular
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: pet-angular
+ template:
+  metadata:
+    labels:
+      app: pet-angular
+  spec:
+    containers:
+    - name: pet-angular
+      image: gcr.io/petclinic-12/angular-gcp
+      ports:
+      - containerPort: 4200
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: pet-angular
+ labels:
+  run: pet-angular
+spec:
+ type: LoadBalancer
+ ports:
+ - port: 4200
+   targetPort: 4200
+   protocol: TCP
+ selector:
+  app: pet-angular

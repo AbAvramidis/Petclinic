@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: rest-gcp
+ labels:
+  app: rest-gcp
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: rest-gcp
+ template:
+  metadata:
+    labels:
+      app: rest-gcp
+  spec:
+    containers:
+    - name: rest-gcp
+      image: gcr.io/petclinic-12/rest-gcp
+      ports:
+      - containerPort: 9966
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: rest-gcp
+ labels:
+  run: rest-gcp
+spec:
+ type: LoadBalancer
+ ports:
+ - port: 9966
+   targetPort: 9966
+   protocol: TCP
+ selector:
+  app: rest-gcp
